@@ -17,8 +17,41 @@
 		  </div>
 		</div>
 	  </div>
-	  
-	 <!-- -->
+
+	<h3>Añadir comentarios</h3>
+	<form class="form-horizontal" method="post" action="/comentarios/{{ cancion._id.toString() }}" encType="multipart/form-data">
+		<div class="form-group">
+			<label class="control-label col-sm-2" for="texto">Texto:</label>
+			<div class="col-sm-10">
+				<input type="text" class="form-control" name="texto"
+					   placeholder="Comentario..." required="true" />
+			</div>
+		</div>
+
+		<div class="form-group">
+			<div class="col-sm-offset-2 col-sm-10">
+				<button type="submit" class="btn btn-primary">Añadir comentario</button>
+			</div>
+		</div>
+	</form>
+
+	<h3>Comentarios</h3>
+	<div class="row">
+		<!-- Inicio del Bloque comentario -->
+		{% for comentario in comentarios %}
+			<div class="col-sm-offset-1">
+				<div class="media-body">
+					<h4 class="media-heading">Usuario: {{ comentario.autor }}</h4>
+					{{ comentario.texto }}
+				</div>
+				<br>
+			</div>
+		{% endfor %}
+		<!-- Fin del Bloque comentario -->
+	</div>
+
+
+	 <!--
 	 <div class="row" style="margin-top: 20px;" >
 		<div class="media col-xs-10">
 			  <div class="media-left media-middle">
@@ -54,4 +87,5 @@
 			  </div>
 		  </div>
 	  </div>
+	  -->
 {% endblock %}

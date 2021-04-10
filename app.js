@@ -2,6 +2,10 @@
 let express = require('express');
 let app = express();
 
+let fs = require('fs');
+let https = require('https');
+
+
 let expressSession = require('express-session');
 app.use(expressSession({
    secret: 'abcdefg',
@@ -115,8 +119,22 @@ app.get('/', function (req, res) {
     res.redirect('/tienda');
 })
 
-//lanzar el servidor
-app.listen(app.get('port'), function (){
-   console.log('Servidor activo');
+//Manejo de errores
+app.use(function (err, req, res, next){
+    console.log("Error producido: "+ err); //mostramos es el error en cosola
+    if (! res.headersSent) {
+        res.status(400);
+        res.send("Recurso no disponible");
+    }
 });
+
+
+//lanzar el servidor
+https.createServer({
+    key: fs.readFileSync('certificates/alice.key'),
+    cert: fs.readFileSync('certificates/alice.crt')
+}, app).listen(app.get('port'), function() {
+    console.log("Servidor activo");
+});
+
 

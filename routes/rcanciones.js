@@ -53,7 +53,7 @@ module.exports = function(app,swig,gestorBD) {
             if (canciones == null) {
                 let respuestaError = swig.renderFile('views/error.html',
                     {
-                        mensajes : "Error al recuperar la canción."
+                        mensajes: "Error al recuperar la canción."
                     });
                 res.send(respuestaError);
             } else {
@@ -65,13 +65,28 @@ module.exports = function(app,swig,gestorBD) {
                         } else {
                             let booleanAutorComprada = isAutorOrComprada(compras, canciones[0], req.session.usuario);
                             resComentarios = comentarios;
-                            let respuesta = swig.renderFile('views/bcancion.html',
-                                {
-                                    cancion: canciones[0],
-                                    comentarios: resComentarios,
-                                    isAutorComprada: booleanAutorComprada
-                                });
-                            res.send(respuesta);
+                            let configuracion = {
+                                url: "https://www.freeforexapi.com/api/live?pairs=EURUSD",
+                                method: "get",
+                                headers: {
+                                    "token": "ejemplo",
+                                }
+                            }
+                            let rest = app.get("rest");
+                            rest(configuracion, function (error, response, body) {
+                                console.log("cod: " + response.statusCode + " Cuerpo :" + body);
+                                let objetoRespuesta = JSON.parse(body);
+                                let cambioUSD = objetoRespuesta.rates.EURUSD.rate;
+                                // nuevo campo "usd"
+                                canciones[0].usd = cambioUSD * canciones[0].precio;
+                                let respuesta = swig.renderFile('views/bcancion.html',
+                                    {
+                                        cancion: canciones[0],
+                                        comentarios: resComentarios,
+                                        isAutorComprada: booleanAutorComprada
+                                    });
+                                res.send(respuesta);
+                            });
                         }
                     });
                 });

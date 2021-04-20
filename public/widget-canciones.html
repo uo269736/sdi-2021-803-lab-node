@@ -67,7 +67,11 @@
                 $( "#"+_id ).remove(); // eliminar el <tr> de la canción
             },
             error : function (error){
-                $( "#contenedor-principal" ).load("widget-login.html");
+                //$( "#contenedor-principal" ).load("widget-login.html");
+                if(error.status==404) {
+                    $("#widget-canciones")
+                        .prepend("<div class='alert alert-danger'>" + error.responseJSON.mensajeerror + "<div");
+                }
             }
         });
     }

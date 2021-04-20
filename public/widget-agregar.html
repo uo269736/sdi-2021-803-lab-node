@@ -44,7 +44,16 @@
 
             },
             error : function (error){
-                $( "#contenedor-principal" ).load("widget-login.html");
+                let mensajes="";
+                let array=error.responseJSON.mensajeserror;
+                for (var i=0;i<array.length;i++){
+                    mensajes+= array[i] +"<br>";
+                }
+                if(error.status==404){
+                    $( "#widget-agregar" )
+                        .prepend("<div class='alert alert-danger'>"+mensajes +"<div");
+                }
+                //$( "#contenedor-principal" ).load("widget-login.html");
             }
         });
     }
